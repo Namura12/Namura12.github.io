@@ -292,7 +292,7 @@ mark.todo{background:var(--todo-bg);color:var(--todo-ink);padding:0 .2em;border-
    - Optional per project: result (shown as a highlighted callout).
    ===================================================================== */
 const PORTFOLIO = {
-  name: "Your Name",
+  name: "Kevin Zhuo",
   role: "Mechanical Engineering Student",
   headline: "Mechanical Engineering Student · Automotive & Vehicle Design",
   intro: "I build and test mechanical hardware, from a shock absorber dynamometer to engine repairs, and I want to bring that to automotive engineering.",
@@ -300,23 +300,24 @@ const PORTFOLIO = {
   heroPhotoAlt: "[Describe the photo, e.g. me with the shock dyno]",
 
   about: [
-    "I’m a mechanical engineering student at [Your University] interested in automotive and vehicle design. I’m most comfortable when I can take an idea from a CAD model to a working rig and then test it.",
-    "[Your approach to problem solving, or what kind of team you want to join and what you want to learn next.]"
+    "I’m a mechanical engineering student at Stony Brook University interested in automotive and vehicle design. I’m most comfortable when I can take an idea from a CAD model to a working part or rig and then test it.",
+    "As an intern machinist on the manufacturing engineering team at North Atlantic Industries, I machine complex parts, design fixtures, and look for ways to make production more efficient."
   ],
 
   links: {
-    email: "you@example.com",
-    linkedin: "https://www.linkedin.com/in/your-handle",
-    github: "https://github.com/your-username",
+    email: "kevinzhuo68752@gmail.com",
+    linkedin: "https://www.linkedin.com/in/kevin-zhuo43/",
+    github: "https://github.com/Namura12",
     resume: "resume.pdf"            // put resume.pdf next to index.html
   },
 
   skills: [
-    { group: "CAD & Design", items: ["[Your CAD software]", "CAD modeling", "Fixture design"] },
+    { group: "CAD & Design", items: ["SolidWorks", "Fusion 360", "PTC Creo", "Fixture design"] },
     { group: "Analysis & Simulation", items: ["Finite element analysis", "Dynamics", "Trajectory simulation"] },
-    { group: "Manufacturing & Shop", items: ["Engine diagnosis and repair", "Test rig fabrication", "[Machining / 3D printing / welding]"] },
-    { group: "Programming", items: ["MATLAB", "[Other languages]"] },
-    { group: "Testing & Instrumentation", items: ["Load cells", "Lab testing and technical reports", "[Data acquisition]"] }
+    { group: "Manufacturing & Shop", items: ["Milling", "Lathe", "3-axis CNC", "5-axis CNC programming", "TIG welding", "3D printing"] },
+    { group: "Programming", items: ["MATLAB", "LabVIEW"] },
+    { group: "Testing & Instrumentation", items: ["Load cells", "Linear potentiometers", "Lab testing and technical reports"] },
+    { group: "Automotive", items: ["Engine diagnosis and repair", "Test rig fabrication"] }
   ],
 
   // Optional photos shown above your experience list (e.g. you at an internship).
@@ -326,39 +327,32 @@ const PORTFOLIO = {
 
   experience: [
     {
-      role: "[Job title]",
-      org: "[Company name]",
-      place: "[City, State]",
-      dates: "[Jun 2026] – [Aug 2026]",
-      focus: "[Team · Area of work]",
+      role: "Intern Machinist",
+      org: "North Atlantic Industries",
+      place: "Bohemia, New York",
+      dates: "May 2026 – Present",
+      focus: "Manufacturing Engineering",
       bullets: [
-        "[What you did, ideally with a number: “Cut fixture setup time from 20 to 8 minutes by …”]",
-        "[Another accomplishment]"
+        "Increased manufacturing efficiency",
+        "Manufactured complex parts",
+        "Designed fixtures"
       ]
-    },
-    {
-      role: "[Job title]",
-      org: "[Company name]",
-      place: "[City, State]",
-      dates: "[Month Year] – [Month Year]",
-      focus: "[Team · Area of work]",
-      bullets: ["[What you did]"]
     }
   ],
 
   education: [
     {
-      degree: "B.S. Mechanical Engineering",
-      school: "[Your University]",
-      dates: "[Expected May 2027]",
-      honors: ["[Dean’s List or other honors]"],
+      degree: "B.E. Mechanical Engineering",
+      school: "Stony Brook University",
+      dates: "Expected May 2027",
+      honors: ["Cum Laude"],
       courses: [
         "Advanced Dynamics",
         "Finite Element Methods",
         "Energy Technologies Laboratory I (MEC 516)",
-        "[Course title] (MEC 568)"
+        "MEC 568"
       ],
-      gpa: "",                      // e.g. "3.6", or leave empty to hide
+      gpa: "3.67",                  // leave empty ("") to hide
       photo: ""                     // e.g. "images/campus.jpg"
     }
   ],
@@ -366,18 +360,11 @@ const PORTFOLIO = {
   // Clubs, teams, and organizations. Shown under Education.
   activities: [
     {
-      name: "[Club or team name]",
+      name: "Stony Brook Motorsports",
       role: "[Your role, e.g. member, suspension lead, treasurer]",
       dates: "[Fall 2024] – present",
       description: "[One sentence on what the group does.]",
       bullets: ["[What you contributed]"]
-    },
-    {
-      name: "[Club or organization name]",
-      role: "[Your role]",
-      dates: "[Month Year] – [Month Year]",
-      description: "[One sentence on what the group does.]",
-      bullets: []
     }
   ],
 
@@ -435,7 +422,7 @@ const PORTFOLIO = {
         { heading: "Verification", paragraphs: ["[What V1–V3 checked and whether the simulation passed.]"], image: "", caption: "" }
       ],
       gallery: [],
-      links: [{ label: "Code on GitHub", url: "https://github.com/your-username/your-repo" }]
+      links: []                     // e.g. [{ label: "Code on GitHub", url: "https://github.com/Namura12/repo-name" }]
     },
     {
       slug: "nx125",
