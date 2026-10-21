@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio</title>
+<meta name="description" content="Mechanical engineering portfolio: projects, experience, education, and activities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f172b;
+  --bg-alt:rgba(22,32,58,.6);
+  --surface:#18223d;
+  --surface-2:#1f2a4a;
+  --border:#313e66;
+  --text:#f5f7fb;
+  --text-dim:#aab3ca;
+  --text-faint:#7680a6;
+  --accent:#ff7a1f;
+  --accent-2:#ee6a10;
+  --todo-bg:rgba(255,214,102,.16);
+  --todo-ink:#ffd666;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --w:1040px;
+  --w-wide:1200px;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+[hidden]{display:none !important}
+mark.todo{background:var(--todo-bg);color:var(--todo-ink);padding:0 .2em;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:10px;z-index:300;background:var(--accent);color:var(--bg);padding:8px 14px;border-radius:6px;font-weight:600}
+.skip:focus{left:10px}
+
+/* soft background glows */
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(255,122,31,.09),transparent 42%),
+    radial-gradient(circle at 82% 62%,rgba(60,96,190,.18),transparent 46%)}
+.site-header,main,.site-footer{position:relative;z-index:1}
+
+/* ---------- nav ---------- */
+.site-header{position:sticky;top:0;z-index:200;background:rgba(12,17,32,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav{max-width:var(--w-wide);margin:0 auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-logo{font-family:var(--mono);font-weight:700;font-size:1.1rem;letter-spacing:.05em;color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links > li{position:relative}
+.nav-links > li > a,.drop-btn{display:flex;align-items:center;gap:6px;font:500 .9rem/1.4 var(--sans);color:var(--text-dim);background:none;border:0;cursor:pointer;transition:color .2s}
+.nav-links > li > a:hover,.drop-btn:hover{color:var(--text)}
+.nav-cta{border:1px solid var(--border);border-radius:6px;padding:7px 16px;color:var(--text) !important;transition:border-color .2s}
+.nav-cta:hover{border-color:var(--accent)}
+.caret{font-size:.65em;transition:transform .2s}
+.drop-wrap:hover .caret,.drop-wrap.open .caret{transform:rotate(180deg)}
+.drop{position:absolute;top:calc(100% + 14px);left:50%;min-width:250px;padding:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 14px 34px rgba(0,0,0,.45);
+  opacity:0;visibility:hidden;transform:translate(-50%,6px);transition:opacity .15s,transform .15s,visibility .15s}
+.drop::before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}   /* keeps hover alive across the gap */
+.drop-wrap:hover .drop,.drop-wrap.open .drop{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.drop a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;font-size:.87rem;color:var(--text-dim)}
+.drop a:hover{background:var(--surface-2);color:var(--text)}
+.drop-num{width:1.4em;font-family:var(--mono);font-size:.75rem;color:var(--accent)}
+.drop-div{height:1px;margin:6px 4px;background:var(--border)}
+.nav-toggle{display:none;flex-direction:column;gap:5px;padding:6px;background:none;border:0;cursor:pointer}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--text);transition:transform .2s,opacity .2s}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-block;padding:13px 26px;border-radius:8px;font-weight:600;font-size:.95rem;transition:background-color .2s,border-color .2s,color .2s,transform .2s}
+.btn-primary{background:var(--accent);color:var(--bg)}
+.btn-primary:hover{background:var(--accent-2);transform:translateY(-1px)}
+.btn-ghost{border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- photo with placeholder ---------- */
+.ph{position:relative;overflow:hidden;background:var(--surface-2)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph.contain img{object-fit:contain}
+.ph-empty{display:none;position:absolute;inset:0;place-items:center;padding:16px;text-align:center;
+  background:repeating-linear-gradient(45deg,transparent 0 12px,rgba(255,255,255,.035) 12px 13px)}
+.ph.is-empty .ph-empty{display:grid}
+.ph.is-empty img{display:none}
+.ph-empty span{font-family:var(--mono);font-size:.75rem;color:var(--text-faint);line-height:1.6}
+.ph-empty code{color:var(--text-dim)}
+
+/* ---------- hero ---------- */
+.hero{min-height:82vh;display:flex;align-items:center;padding:60px 24px}
+.hero-inner{width:100%;max-width:var(--w-wide);margin:0 auto;display:grid;grid-template-columns:1.3fr .7fr;gap:56px;align-items:center}
+.eyebrow{margin-bottom:18px;font-family:var(--mono);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.hero h1{margin-bottom:22px;font-size:clamp(2.4rem,6vw,4rem);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.hero-sub{max-width:560px;margin-bottom:32px;font-size:1.08rem;color:var(--text-dim)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px}
+.hero-resume{margin-top:22px;font-family:var(--mono);font-size:.82rem}
+.hero-resume a{color:var(--text-dim);border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .2s,border-color .2s}
+.hero-resume a:hover{color:var(--accent);border-color:var(--accent)}
+.hero-photo .ph{aspect-ratio:4/5;border:1px solid var(--border);border-radius:16px}
+
+/* ---------- sections ---------- */
+.section{padding:96px 24px;scroll-margin-top:60px}
+.section.alt{background:var(--bg-alt)}
+.inner{max-width:var(--w);margin:0 auto}
+.inner.wide{max-width:var(--w-wide)}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:44px;font-size:1.85rem;font-weight:700;line-height:1.2}
+.num{font-family:var(--mono);font-size:1rem;font-weight:500;color:var(--accent)}
+.sub-title{margin:64px 0 24px;font-size:1.3rem;font-weight:700;scroll-margin-top:80px}
+
+.about-text{max-width:760px;margin-bottom:20px;font-size:1.05rem;color:var(--text-dim)}
+
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.skill-group h3{margin-bottom:10px;font-size:1rem;font-weight:700;color:var(--accent)}
+.skill-group p{font-size:.92rem;line-height:1.75;color:var(--text-dim)}
+
+.photo-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:40px}
+.photo-row .ph{aspect-ratio:4/3;border:1px solid var(--border);border-radius:12px}
+
+/* experience-style rows */
+.rows{border-top:1px solid var(--border)}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 24px;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--border)}
+.row-title{font-size:1.08rem;font-weight:700}
+.row-date{grid-row:1;grid-column:2;font-family:var(--mono);font-size:.8rem;color:var(--text-faint);white-space:nowrap}
+.row-org{grid-column:1;font-size:.92rem;font-weight:500;color:var(--accent-2)}
+.row-desc{grid-column:1/-1;max-width:640px;font-size:.92rem;color:var(--text-dim)}
+.row-list{grid-column:1/-1;max-width:680px;margin-top:4px}
+.row-list li,.bullets li{position:relative;padding-left:18px;margin-bottom:5px;font-size:.92rem;color:var(--text-dim)}
+.row-list li::before,.bullets li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:2px;background:var(--accent)}
+
+/* education */
+.edu-item{display:grid;grid-template-columns:1fr;gap:28px;padding:24px 0;border-bottom:1px solid var(--border)}
+.edu-item.has-photo{grid-template-columns:1.5fr 1fr;align-items:start}
+.edu-item:last-of-type{border-bottom:0}
+.edu-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}
+.edu-head h3{font-size:1.15rem;font-weight:700}
+.edu-date{font-family:var(--mono);font-size:.8rem;color:var(--text-faint)}
+.edu-org{margin-top:6px;font-size:.92rem;color:var(--accent-2)}
+.edu-detail{margin-top:8px;font-size:.88rem;color:var(--text-dim)}
+.edu-detail b{color:var(--text);font-weight:600}
+.gpa{display:inline-flex;align-items:baseline;gap:6px;margin-top:14px}
+.gpa strong{font-family:var(--mono);font-size:1.7rem;font-weight:700;color:var(--accent)}
+.gpa span{font-size:.8rem;color:var(--text-faint)}
+.edu-item .ph{aspect-ratio:4/3;border:1px solid var(--border);border-radius:12px}
+
+/* project cards */
+.project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.card{display:flex;flex-direction:column;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:14px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--accent-2);transform:translateY(-2px)}
+.card .ph{aspect-ratio:16/10}
+.card-body{display:flex;flex-direction:column;flex:1;padding:22px 24px 24px}
+.card-num{margin-bottom:8px;font-family:var(--mono);font-size:.75rem;color:var(--accent)}
+.card h3{margin-bottom:10px;font-size:1.2rem;font-weight:700;line-height:1.3}
+.card p{flex:1;font-size:.9rem;color:var(--text-dim)}
+.card-link{margin-top:16px;font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+.card.featured{grid-column:1/-1;flex-direction:row}
+.card.featured .ph{width:46%;aspect-ratio:auto;min-height:300px}
+.card.featured .card-body{width:54%;justify-content:center;padding:32px 36px}
+.card.featured h3{font-size:1.5rem}
+.card.featured p{flex:0;font-size:.98rem}
+
+/* mini projects: lighter dashed cards */
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mini{display:flex;flex-direction:column;padding:20px 22px 22px;border:1px dashed var(--border);border-radius:14px;transition:border-color .2s}
+.mini:hover{border-color:var(--accent-2)}
+.mini-date{margin-bottom:8px;font-family:var(--mono);font-size:.75rem;color:var(--text-faint)}
+.mini h4{margin-bottom:8px;font-size:1.05rem;font-weight:700;line-height:1.3}
+.mini p{font-size:.88rem;color:var(--text-dim)}
+.mini-tools{margin-top:12px;font-family:var(--mono);font-size:.72rem;color:var(--accent-2)}
+.mini-link{margin-top:14px;font-family:var(--mono);font-size:.78rem;color:var(--accent)}
+.mini-link:hover{text-decoration:underline}
+
+/* contact */
+.section.contact{text-align:center}
+.section.contact .section-title{justify-content:center}
+.contact-intro{max-width:520px;margin:-20px auto 36px;color:var(--text-dim)}
+.contact-links{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+.contact-link{display:flex;flex-direction:column;gap:6px;min-width:200px;padding:20px 28px;background:var(--surface);border:1px solid var(--border);border-radius:10px;transition:border-color .2s,transform .2s}
+.contact-link:hover{border-color:var(--accent);transform:translateY(-2px)}
+.contact-label{font-family:var(--mono);font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--text-faint)}
+.contact-value{font-size:.95rem;font-weight:500;overflow-wrap:anywhere}
+
+.site-footer{padding:32px 24px;border-top:1px solid var(--border);text-align:center;font-size:.82rem;color:var(--text-faint)}
+
+/* ---------- project page ---------- */
+.breadcrumb{max-width:var(--w-wide);margin:0 auto;padding:22px 24px 0;font-family:var(--mono);font-size:.82rem;color:var(--text-faint)}
+.breadcrumb a{color:var(--text-dim)}
+.breadcrumb a:hover{color:var(--accent)}
+.project-hero{max-width:var(--w-wide);margin:20px auto 0;padding:0 24px}
+.project-hero .ph{height:min(480px,56vw);border:1px solid var(--border);border-radius:16px;background:var(--surface)}
+.project-head{padding:36px 0 8px}
+.tag{margin-bottom:14px;font-family:var(--mono);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.project-head h1{margin-bottom:14px;font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.project-lede{max-width:720px;margin-bottom:18px;font-size:1.08rem;color:var(--text-dim)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:.9rem;color:var(--text-dim)}
+.meta strong{color:var(--text);font-weight:600}
+.project-body{max-width:var(--w);margin:0 auto;padding:40px 24px 80px}
+.p-section{margin-bottom:64px}
+.p-section h2{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;font-size:1.5rem;font-weight:700}
+.p-section h2 .num{font-size:.9rem}
+.p-section > p{max-width:720px;margin-bottom:18px;color:var(--text-dim)}
+.bullets{max-width:720px}
+.bullets li{font-size:1rem;margin-bottom:8px}
+.figure{margin:20px 0;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.figure .ph{aspect-ratio:16/9}
+.figure figcaption,.gallery figcaption{padding:12px 16px;border-top:1px solid var(--border);font-size:.8rem;color:var(--text-faint)}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.gallery figure{overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.gallery .ph{aspect-ratio:4/3}
+.result-box{margin:20px 0;padding:20px 22px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px}
+.result-label{margin-bottom:6px;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.result-box p{font-size:.95rem;color:var(--text-dim)}
+.used-label{margin-top:18px;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint)}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tag-row li{padding:4px 10px;border-radius:5px;background:rgba(255,122,31,.12);font-family:var(--mono);font-size:.75rem;color:var(--accent-2)}
+.link-buttons{display:flex;flex-wrap:wrap;gap:12px}
+.pager{max-width:var(--w);margin:0 auto;padding:0 24px 80px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto}
+.not-found{max-width:var(--w);margin:0 auto;padding:120px 24px;text-align:center}
+.not-found h1{margin-bottom:12px;font-size:2rem}
+.not-found a{color:var(--accent)}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-photo{order:-1;width:100%;max-width:320px;margin:0 auto}
+  .mini-grid{grid-template-columns:1fr 1fr}
+  .skills-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:780px){
+  .nav-toggle{display:flex}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;height:calc(100vh - 100%);height:calc(100dvh - 61px);flex-direction:column;align-items:stretch;gap:0;padding:12px 24px 40px;overflow-y:auto;background:var(--bg);border-top:1px solid var(--border)}
+  .nav-links.open{display:flex}
+  .nav-links > li{padding:12px 0;border-bottom:1px solid var(--border)}
+  .nav-links > li > a,.drop-btn{font-size:1rem;width:100%}
+  .nav-cta{border:0;padding:0}
+  .drop{position:static;display:none;min-width:0;margin-top:8px;opacity:1;visibility:visible;transform:none;border:0;box-shadow:none;background:var(--surface-2)}
+  .drop::before{display:none}
+  .drop-wrap.open .drop{display:block}
+  .drop-wrap:hover .drop{transform:none}
+  .project-grid,.gallery,.mini-grid,.skills-grid{grid-template-columns:1fr}
+  .card.featured{flex-direction:column}
+  .card.featured .ph,.card.featured .card-body{width:100%}
+  .card.featured .ph{aspect-ratio:16/10;min-height:0}
+  .card.featured .card-body{padding:22px 24px 24px}
+  .edu-item.has-photo{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .row-date{grid-row:auto;grid-column:1}
+  .section{padding:72px 20px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none !important;animation:none !important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="glow" aria-hidden="true"></div>
+<header class="site-header" id="site-header"></header>
+
+<main id="main">
+  <section class="hero" id="top" aria-label="Introduction"></section>
+</main>
+
+<main id="project-view" hidden></main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<!-- ============================================================
+     YOUR CONTENT: edit the PORTFOLIO object in this script.
+     ============================================================ -->
+<script>
+/* =====================================================================
+   EVERYTHING ABOUT YOU LIVES IN THIS OBJECT.
+   - Anything in [square brackets] is a placeholder. It shows up
+     highlighted in yellow on the site until you replace it.
+   - Put photos in an "images" folder. If a photo path below doesn't
+     exist yet, the site shows a striped box with the file name it expects.
+   - Delete an entry to remove it. An empty list hides its section.
+   - Each project gets its own page automatically (index.html#project-slug).
+   - The first project is shown as the large featured card.
+   - Optional per project: result (shown as a highlighted callout).
+   ===================================================================== */
+const PORTFOLIO = {
+  name: "Your Name",
+  role: "Mechanical Engineering Student",
+  headline: "Mechanical Engineering Student · Automotive & Vehicle Design",
+  intro: "I build and test mechanical hardware, from a shock absorber dynamometer to engine repairs, and I want to bring that to automotive engineering.",
+  heroPhoto: "images/hero.jpg",
+  heroPhotoAlt: "[Describe the photo, e.g. me with the shock dyno]",
+
+  about: [
+    "I’m a mechanical engineering student at [Your University] interested in automotive and vehicle design. I’m most comfortable when I can take an idea from a CAD model to a working rig and then test it.",
+    "[Your approach to problem solving, or what kind of team you want to join and what you want to learn next.]"
+  ],
+
+  links: {
+    email: "you@example.com",
+    linkedin: "https://www.linkedin.com/in/your-handle",
+    github: "https://github.com/your-username",
+    resume: "resume.pdf"            // put resume.pdf next to index.html
+  },
+
+  skills: [
+    { group: "CAD & Design", items: ["[Your CAD software]", "CAD modeling", "Fixture design"] },
+    { group: "Analysis & Simulation", items: ["Finite element analysis", "Dynamics", "Trajectory simulation"] },
+    { group: "Manufacturing & Shop", items: ["Engine diagnosis and repair", "Test rig fabrication", "[Machining / 3D printing / welding]"] },
+    { group: "Programming", items: ["MATLAB", "[Other languages]"] },
+    { group: "Testing & Instrumentation", items: ["Load cells", "Lab testing and technical reports", "[Data acquisition]"] }
+  ],
+
+  // Optional photos shown above your experience list (e.g. you at an internship).
+  experiencePhotos: [
+    // { src: "images/internship.jpg", alt: "Me outside the [Company] office" }
+  ],
+
+  experience: [
+    {
+      role: "[Job title]",
+      org: "[Company name]",
+      place: "[City, State]",
+      dates: "[Jun 2026] – [Aug 2026]",
+      focus: "[Team · Area of work]",
+      bullets: [
+        "[What you did, ideally with a number: “Cut fixture setup time from 20 to 8 minutes by …”]",
+        "[Another accomplishment]"
+      ]
+    },
+    {
+      role: "[Job title]",
+      org: "[Company name]",
+      place: "[City, State]",
+      dates: "[Month Year] – [Month Year]",
+      focus: "[Team · Area of work]",
+      bullets: ["[What you did]"]
+    }
+  ],
+
+  education: [
+    {
+      degree: "B.S. Mechanical Engineering",
+      school: "[Your University]",
+      dates: "[Expected May 2027]",
+      honors: ["[Dean’s List or other honors]"],
+      courses: [
+        "Advanced Dynamics",
+        "Finite Element Methods",
+        "Energy Technologies Laboratory I (MEC 516)",
+        "[Course title] (MEC 568)"
+      ],
+      gpa: "",                      // e.g. "3.6", or leave empty to hide
+      photo: ""                     // e.g. "images/campus.jpg"
+    }
+  ],
+
+  // Clubs, teams, and organizations. Shown under Education.
+  activities: [
+    {
+      name: "[Club or team name]",
+      role: "[Your role, e.g. member, suspension lead, treasurer]",
+      dates: "[Fall 2024] – present",
+      description: "[One sentence on what the group does.]",
+      bullets: ["[What you contributed]"]
+    },
+    {
+      name: "[Club or organization name]",
+      role: "[Your role]",
+      dates: "[Month Year] – [Month Year]",
+      description: "[One sentence on what the group does.]",
+      bullets: []
+    }
+  ],
+
+  projects: [
+    {
+      slug: "shock-dyno",
+      title: "Crank-Driven Shock Dynamometer",
+      status: "[In progress / Completed]",
+      date: "[Fall 2026]",
+      summary: "A bench rig that strokes a nitrogen-charged shock with a crank and measures damping force with an S-beam load cell.",
+      image: "images/shock-dyno.jpg",
+      imageAlt: "Shock dyno fixture",
+      role: "[Solo project / your role]",
+      team: "",
+      tools: ["CAD", "S-beam load cell", "[Data acquisition]", "Fabrication"],
+      overview: [
+        "[Why you built it and what question you wanted to answer.]",
+        "A crank drives the shock’s lower eye. The upper eye reacts into a whiffletree lever: the upper bar is fixed, and the lower bar is pinned at one end and supported at its midpoint by an S-beam load cell. Because the shock eye sits on the load cell’s axis, the lever arms are equal and the load cell reads the shock force directly."
+      ],
+      highlights: [
+        "Designed the whiffletree lever fixture that carries the shock’s reaction load into the load cell",
+        "Modeled the full fixture in CAD before building it",
+        "[Add a result, e.g. force vs. velocity curves for the shock you tested]"
+      ],
+      result: "[Your key result, e.g. the damping force range you measured in lbf and the shaft speeds in in/s]",
+      sections: [
+        { heading: "Design", paragraphs: ["[Design choices, sizing, and what you’d change.]"], image: "images/shock-dyno-cad.png", caption: "CAD model of the fixture" },
+        { heading: "Testing and results", paragraphs: ["[What you measured and what it showed.]"], image: "", caption: "" }
+      ],
+      gallery: [],
+      links: []
+    },
+    {
+      slug: "trajectory-sim",
+      title: "Earth-to-Moon Trajectory Simulation",
+      status: "Group project · MEC 568",
+      date: "Fall 2026",
+      summary: "A MATLAB simulation of a spacecraft’s path from Earth orbit to the Moon, built with a team.",
+      image: "images/trajectory.png",
+      imageAlt: "Plot of the simulated Earth-to-Moon trajectory",
+      role: "Baseline TLI flyby and verification tests",
+      team: "[Number]-person team",
+      tools: ["MATLAB", "Orbital mechanics", "Numerical integration"],
+      overview: [
+        "For our MEC 568 midterm project, my group built a MATLAB simulation of a spacecraft traveling from Earth to the Moon. I was responsible for the baseline trans-lunar injection (TLI) flyby case and the verification tests that check the simulation."
+      ],
+      highlights: [
+        "Built the baseline trans-lunar injection (TLI) flyby case",
+        "Wrote verification tests V1–V3 to check the simulation against [known results]",
+        "[Add a result, e.g. how close the flyby came to the target]"
+      ],
+      result: "[Your key result, e.g. closest approach to the Moon and how it compared to the expected value]",
+      sections: [
+        { heading: "Baseline TLI flyby", paragraphs: ["[How you set up the case and what it produced.]"], image: "", caption: "" },
+        { heading: "Verification", paragraphs: ["[What V1–V3 checked and whether the simulation passed.]"], image: "", caption: "" }
+      ],
+      gallery: [],
+      links: [{ label: "Code on GitHub", url: "https://github.com/your-username/your-repo" }]
+    },
+    {
+      slug: "nx125",
+      title: "1988 Honda NX125 Engine Repair",
+      status: "In progress",
+      date: "[2026]",
+      summary: "Diagnosing and repairing a single-cylinder motorcycle engine after its cam timing chain skipped.",
+      image: "images/nx125.jpg",
+      imageAlt: "Honda NX125 engine with the side cover off",
+      role: "Solo project",
+      team: "",
+      tools: ["Engine teardown", "Cam timing", "Diagnostics"],
+      overview: [
+        "The engine got very loud and then died. I traced it to a skipped cam timing chain and re-timed it, but the engine still wouldn’t start. [Describe what you found and fixed next.]"
+      ],
+      highlights: [
+        "Traced the failure to a skipped cam chain",
+        "Re-timed the cam chain and [describe the next step and outcome]"
+      ],
+      sections: [],
+      gallery: [],
+      links: []
+    },
+    {
+      slug: "gs300",
+      title: "Lexus GS300 Misfire Diagnosis",
+      status: "[In progress / Solved]",
+      date: "[2026]",
+      summary: "Tracking down an intermittent misfire and stall on a 2002 Lexus GS300 with the 2JZ-GE inline-six.",
+      image: "images/gs300.jpg",
+      imageAlt: "2JZ-GE engine bay",
+      role: "Solo project",
+      team: "",
+      tools: ["OBD-II scan data", "[Other tools]"],
+      overview: [
+        "The car had three separate symptoms: stalling on cold start, misfires at warm idle, and misfires under hard launch. [Describe how you narrowed it down.]"
+      ],
+      highlights: [
+        "Separated the problem into cold-start, warm-idle, and load-related symptoms",
+        "[What you tested, what the cause was, and how you fixed it]"
+      ],
+      sections: [],
+      gallery: [],
+      links: []
+    }
+  ],
+
+  // Smaller builds, scripts, class assignments, quick fixes.
+  miniProjects: [
+    {
+      title: "[Mini project name]",
+      date: "[Spring 2026]",
+      summary: "[One or two sentences: what it is and what it does.]",
+      tools: ["[Tool]", "[Tool]"],
+      link: { label: "View on GitHub", url: "[link]" }
+    },
+    {
+      title: "[Mini project name]",
+      date: "[Fall 2025]",
+      summary: "[One or two sentences: what it is and what it does.]",
+      tools: ["[Tool]"],
+      link: null
+    },
+    {
+      title: "[Mini project name]",
+      date: "[Summer 2025]",
+      summary: "[One or two sentences: what it is and what it does.]",
+      tools: ["[Tool]"],
+      link: null
+    }
+  ]
+};
+</script>
+
+<!-- Builds the page from PORTFOLIO. No need to edit below. -->
+<script>
+(function () {
+  const P = PORTFOLIO;
+  const L = P.links || {};
+  const $ = id => document.getElementById(id);
+
+  /* ---------- helpers ---------- */
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const txt = s => esc(s).replace(/\[([^\]]+)\]/g, '<mark class="todo" title="Placeholder: edit this in PORTFOLIO">[$1]</mark>');
+  const isExt = url => /^https?:\/\//.test(url);
+  const ext = url => isExt(url) ? ' target="_blank" rel="noopener"' : "";
+  const has = v => Array.isArray(v) ? v.length > 0 : !!v;
+  const dots = arr => (arr || []).map(txt).join(" · ");
+  const pad = n => String(n).padStart(2, "0");
+  const projUrl = p => `#project-${p.slug}`;
+  const photo = (src, alt, cls = "") => `
+    <div class="ph${cls ? " " + cls : ""}${src ? "" : " is-empty"}">
+      ${src ? `<img src="${esc(src)}" alt="${esc(alt || "")}" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">` : ""}
+      <div class="ph-empty"><span>Add a photo${src ? `<br><code>${esc(src)}</code>` : ""}</span></div>
+    </div>`;
+
+  /* ---------- nav ---------- */
+  function nav() {
+    const initials = P.name.split(/\s+/).filter(Boolean).map(w => w[0]).join("").slice(0, 3).toUpperCase();
+    const li = (id, label, show) => show ? `<li><a href="#${id}">${label}</a></li>` : "";
+    const projItems = (P.projects || []).map((p, i) =>
+      `<li><a href="${projUrl(p)}"><span class="drop-num">${pad(i + 1)}</span>${txt(p.title)}</a></li>`).join("");
+    const miniItem = has(P.miniProjects)
+      ? `<li class="drop-div" role="separator"></li><li><a href="#mini-projects"><span class="drop-num">+</span>Mini projects</a></li>` : "";
+
+    $("site-header").innerHTML = `
+      <nav class="nav" aria-label="Main">
+        <a class="nav-logo" href="#top" aria-label="${esc(P.name)}, home">${esc(initials)}</a>
+        <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
+        <ul class="nav-links" id="nav-menu">
+          ${li("about", "About", has(P.about))}
+          ${li("skills", "Skills", has(P.skills))}
+          ${li("experience", "Experience", has(P.experience))}
+          ${li("education", "Education", has(P.education) || has(P.activities))}
+          ${has(P.projects) ? `
+          <li class="drop-wrap">
+            <button class="drop-btn" type="button" aria-expanded="false">Projects <span class="caret" aria-hidden="true">▼</span></button>
+            <ul class="drop">${projItems}${miniItem}</ul>
+          </li>` : li("projects", "Projects", has(P.miniProjects))}
+          <li><a class="nav-cta" href="#contact">Contact</a></li>
+        </ul>
+      </nav>`;
+
+    const toggle = document.querySelector(".nav-toggle");
+    const menu = $("nav-menu");
+    const wrap = document.querySelector(".drop-wrap");
+    const dropBtn = document.querySelector(".drop-btn");
+    const setMenu = open => { menu.classList.toggle("open", open); toggle.setAttribute("aria-expanded", open); };
+    const setDrop = open => { if (wrap) { wrap.classList.toggle("open", open); dropBtn.setAttribute("aria-expanded", open); } };
+
+    toggle.addEventListener("click", () => setMenu(!menu.classList.contains("open")));
+    if (dropBtn) dropBtn.addEventListener("click", e => { e.stopPropagation(); setDrop(!wrap.classList.contains("open")); });
+    document.addEventListener("click", e => { if (wrap && !wrap.contains(e.target)) setDrop(false); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { setDrop(false); setMenu(false); } });
+    menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { setDrop(false); setMenu(false); }));
+  }
+
+  /* ---------- home ---------- */
+  function renderHome() {
+    document.title = `${P.name} | ${P.role}`;
+
+    $("top").innerHTML = `
+      <div class="hero-inner">
+        <div class="reveal">
+          <p class="eyebrow">${txt(P.headline)}</p>
+          <h1>${txt(P.name)}</h1>
+          <p class="hero-sub">${txt(P.intro)}</p>
+          <div class="hero-actions">
+            ${has(P.projects) ? `<a class="btn btn-primary" href="#projects">View projects</a>` : ""}
+            <a class="btn btn-ghost" href="#contact">Get in touch</a>
+          </div>
+          ${L.resume ? `<p class="hero-resume"><a href="${esc(L.resume)}" target="_blank" rel="noopener">Download résumé (PDF)</a></p>` : ""}
+        </div>
+        ${P.heroPhoto ? `<div class="hero-photo reveal">${photo(P.heroPhoto, P.heroPhotoAlt)}</div>` : ""}
+      </div>`;
+
+    // Sections are numbered in the order they appear.
+    const blocks = [];
+    if (has(P.about)) blocks.push(["about", "About", "",
+      P.about.map(p => `<p class="about-text">${txt(p)}</p>`).join("")]);
+
+    if (has(P.skills)) blocks.push(["skills", "Skills", "",
+      `<div class="skills-grid">${P.skills.map(g => `
+        <div class="skill-group reveal"><h3>${txt(g.group)}</h3><p>${dots(g.items)}</p></div>`).join("")}</div>`]);
+
+    if (has(P.experience)) blocks.push(["experience", "Experience", "",
+      `${has(P.experiencePhotos) ? `<div class="photo-row">${P.experiencePhotos.map(ph => photo(ph.src, ph.alt)).join("")}</div>` : ""}
+       <div class="rows">${P.experience.map(e => row({
+         title: e.role, date: e.dates, org: [e.org, e.place].filter(Boolean).map(txt).join(" · "),
+         desc: e.focus, bullets: e.bullets })).join("")}</div>`]);
+
+    if (has(P.education) || has(P.activities)) blocks.push(["education", "Education", "",
+      `${(P.education || []).map(ed => `
+        <div class="edu-item reveal${ed.photo ? " has-photo" : ""}">
+          <div>
+            <div class="edu-head"><h3>${txt(ed.degree)}</h3><span class="edu-date">${txt(ed.dates)}</span></div>
+            <p class="edu-org">${txt(ed.school)}</p>
+            ${has(ed.honors) ? `<p class="edu-detail"><b>Honors:</b> ${dots(ed.honors)}</p>` : ""}
+            ${has(ed.courses) ? `<p class="edu-detail"><b>Relevant coursework:</b> ${dots(ed.courses)}</p>` : ""}
+            ${ed.gpa ? `<p class="gpa"><strong>${txt(ed.gpa)}</strong><span>GPA</span></p>` : ""}
+          </div>
+          ${ed.photo ? photo(ed.photo, ed.degree) : ""}
+        </div>`).join("")}
+       ${has(P.activities) ? `
+        <h3 class="sub-title" id="activities">Clubs &amp; activities</h3>
+        <div class="rows">${P.activities.map(c => row({
+          title: c.name, date: c.dates, org: txt(c.role), desc: c.description, bullets: c.bullets })).join("")}</div>` : ""}`]);
+
+    if (has(P.projects) || has(P.miniProjects)) blocks.push(["projects", "Projects", "wide",
+      `${has(P.projects) ? `<div class="project-grid">${P.projects.map((p, i) => `
+        <a class="card reveal${i === 0 ? " featured" : ""}" href="${projUrl(p)}">
+          ${photo(p.image, p.imageAlt || p.title, "contain")}
+          <div class="card-body">
+            <p class="card-num">${pad(i + 1)}${p.status ? ` · ${txt(p.status)}` : ""}</p>
+            <h3>${txt(p.title)}</h3>
+            <p>${txt(p.summary)}</p>
+            <span class="card-link">View project →</span>
+          </div>
+        </a>`).join("")}</div>` : ""}
+       ${has(P.miniProjects) ? `
+        <h3 class="sub-title" id="mini-projects">Mini projects</h3>
+        <div class="mini-grid">${P.miniProjects.map(m => `
+          <div class="mini reveal">
+            ${m.date ? `<p class="mini-date">${txt(m.date)}</p>` : ""}
+            <h4>${txt(m.title)}</h4>
+            ${m.summary ? `<p>${txt(m.summary)}</p>` : ""}
+            ${has(m.tools) ? `<p class="mini-tools">${m.tools.map(txt).join(" · ")}</p>` : ""}
+            ${m.link && m.link.url ? `<a class="mini-link" href="${esc(m.link.url)}"${ext(m.link.url)}>${txt(m.link.label || "View")} →</a>` : ""}
+          </div>`).join("")}</div>` : ""}`]);
+
+    const contacts = [
+      L.email && ["Email", L.email, `mailto:${L.email}`],
+      L.linkedin && ["LinkedIn", L.linkedin.replace(/^https?:\/\/(www\.)?/, ""), L.linkedin],
+      L.github && ["GitHub", L.github.replace(/^https?:\/\/(www\.)?/, ""), L.github],
+      L.resume && ["Résumé", "Download PDF", L.resume]
+    ].filter(Boolean);
+    blocks.push(["contact", "Contact", "contact",
+      `<p class="contact-intro">I’m happy to talk about internships, full-time roles, or any of the projects on this page.</p>
+       <div class="contact-links">${contacts.map(([label, value, href]) => `
+         <a class="contact-link reveal" href="${esc(href)}"${ext(href) || (label === "Résumé" ? ' target="_blank" rel="noopener"' : "")}>
+           <span class="contact-label">${label}</span><span class="contact-value">${esc(value)}</span>
+         </a>`).join("")}</div>`]);
+
+    $("main").insertAdjacentHTML("beforeend", blocks.map(([id, title, mod, body], i) => `
+      <section class="section${i % 2 === 0 ? " alt" : ""}${mod === "contact" ? " contact" : ""}" id="${id}">
+        <div class="inner${mod === "wide" ? " wide" : ""}">
+          <h2 class="section-title reveal"><span class="num">${pad(i + 1)}</span>${title}</h2>
+          ${body}
+        </div>
+      </section>`).join(""));
+  }
+
+  function row(r) {
+    return `
+      <div class="row reveal">
+        <h3 class="row-title">${txt(r.title)}</h3>
+        <span class="row-date">${txt(r.date)}</span>
+        ${r.org ? `<p class="row-org">${r.org}</p>` : ""}
+        ${r.desc ? `<p class="row-desc">${txt(r.desc)}</p>` : ""}
+        ${has(r.bullets) ? `<ul class="row-list">${r.bullets.map(b => `<li>${txt(b)}</li>`).join("")}</ul>` : ""}
+      </div>`;
+  }
+
+  /* ---------- project page ---------- */
+  function renderProject(slug) {
+    const all = P.projects || [];
+    const i = all.findIndex(p => p.slug === slug);
+    const root = $("project-view");
+
+    if (i < 0) {
+      document.title = `Project not found | ${P.name}`;
+      root.innerHTML = `<div class="not-found"><h1>Project not found</h1><p>This link doesn’t match a project. <a href="#projects">See all projects</a>.</p></div>`;
+      return;
+    }
+    const p = all[i], prev = all[i - 1], next = all[i + 1];
+    document.title = `${p.title} | ${P.name}`;
+
+    const meta = [
+      p.role && ["Role", txt(p.role)],
+      p.team && ["Team", txt(p.team)],
+      p.date && ["Date", txt(p.date)]
+    ].filter(Boolean);
+
+    const secs = [];
+    if (has(p.overview)) secs.push(["Overview", p.overview.map(t => `<p>${txt(t)}</p>`).join("") +
+      (p.result ? `<div class="result-box"><p class="result-label">Result</p><p>${txt(p.result)}</p></div>` : "")]);
+    if (has(p.highlights)) secs.push(["What I did",
+      `<ul class="bullets">${p.highlights.map(h => `<li>${txt(h)}</li>`).join("")}</ul>
+       ${has(p.tools) ? `<p class="used-label">Skills used</p><ul class="tag-row">${p.tools.map(t => `<li>${txt(t)}</li>`).join("")}</ul>` : ""}`]);
+    (p.sections || []).forEach(s => secs.push([s.heading,
+      (s.paragraphs || []).map(t => `<p>${txt(t)}</p>`).join("") +
+      (s.image ? `<figure class="figure">${photo(s.image, s.caption || s.heading, "contain")}${s.caption ? `<figcaption>${txt(s.caption)}</figcaption>` : ""}</figure>` : "")]));
+    if (has(p.gallery)) secs.push(["Gallery",
+      `<div class="gallery">${p.gallery.map(g => `<figure>${photo(g.src, g.caption, "contain")}${g.caption ? `<figcaption>${txt(g.caption)}</figcaption>` : ""}</figure>`).join("")}</div>`]);
+    if (has(p.links)) secs.push(["Links",
+      `<div class="link-buttons">${p.links.map(l => `<a class="btn btn-ghost" href="${esc(l.url)}"${ext(l.url)}>${txt(l.label)}</a>`).join("")}</div>`]);
+
+    root.innerHTML = `
+      <p class="breadcrumb"><a href="#top">Home</a> / <a href="#projects">Projects</a> / ${txt(p.title)}</p>
+      <header class="project-hero">
+        ${photo(p.image, p.imageAlt || p.title, "contain")}
+        <div class="project-head">
+          <p class="tag">${[p.status, p.date].filter(Boolean).map(txt).join(" · ")}</p>
+          <h1>${txt(p.title)}</h1>
+          <p class="project-lede">${txt(p.summary)}</p>
+          ${meta.length ? `<p class="meta">${meta.map(([k, v]) => `<span><strong>${k}:</strong> ${v}</span>`).join("")}</p>` : ""}
+        </div>
+      </header>
+      <div class="project-body">
+        ${secs.map(([h, body], n) => `
+          <section class="p-section reveal">
+            <h2><span class="num">${pad(n + 1)}</span>${txt(h)}</h2>
+            ${body}
+          </section>`).join("")}
+      </div>
+      <nav class="pager" aria-label="More projects">
+        ${prev ? `<a class="btn btn-ghost" href="${projUrl(prev)}">← ${txt(prev.title)}</a>` : ""}
+        ${next ? `<a class="btn btn-ghost next" href="${projUrl(next)}">${txt(next.title)} →</a>` : `<a class="btn btn-ghost next" href="#projects">All projects →</a>`}
+      </nav>`;
+  }
+
+  /* ---------- scroll reveal ---------- */
+  const io = ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+    ? new IntersectionObserver(entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+      }), { threshold: 0.08, rootMargin: "0px 0px -40px 0px" })
+    : null;
+  function reveal(scope) {
+    scope.querySelectorAll(".reveal:not(.visible)").forEach(el => io ? io.observe(el) : el.classList.add("visible"));
+  }
+
+  /* ---------- router: #project-<slug> shows a project page ---------- */
+  let homeTitle = "";
+  function route() {
+    const h = decodeURIComponent(location.hash.slice(1));
+    const home = $("main"), proj = $("project-view");
+    if (h.startsWith("project-")) {
+      renderProject(h.slice(8));
+      home.hidden = true; proj.hidden = false;
+      window.scrollTo(0, 0);
+      reveal(proj);
+    } else {
+      proj.hidden = true; home.hidden = false;
+      document.title = homeTitle;
+      const el = h && document.getElementById(h);
+      if (el) requestAnimationFrame(() => el.scrollIntoView());
+    }
+  }
+
+  nav();
+  renderHome();
+  homeTitle = document.title;
+  $("site-footer").textContent = `© ${new Date().getFullYear()} ${P.name}. Built with plain HTML, CSS, and JavaScript.`;
+  reveal(document);
+  route();
+  window.addEventListener("hashchange", route);
+})();
+</script>
+</body>
+</html>
